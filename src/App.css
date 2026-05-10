@@ -1,0 +1,111 @@
+/* --- Global Container --- */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--bg);
+}
+
+/* --- Main Content Area --- */
+/* This is the part that fills the screen between Navbar and Footer */
+main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+/* --- Dashboard / Card Grid --- */
+.admin-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.driver-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 30px;
+  width: 100%;
+}
+
+/* --- Driver Card Styling --- */
+.driver-card {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: left;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow);
+}
+
+.driver-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+}
+
+/* --- Form Container --- */
+/* Centers your 'Register New Taxi Driver' form */
+.form-container {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  padding: 40px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: var(--shadow);
+  margin-top: 20px;
+}
+
+/* --- UI Components (Buttons/Inputs) --- */
+button {
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px var(--accent-bg);
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0 20px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-h);
+}
+
+input:focus {
+  outline: 2px solid var(--accent);
+  border-color: transparent;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 28px;
+  }
+  
+  .form-container {
+    padding: 20px;
+  }
+}

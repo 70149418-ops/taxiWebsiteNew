@@ -7,6 +7,14 @@ import DriverList from '../view/adminview/DriverList';
 const Admin = () => {
   const [drivers, setDrivers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  // Track screen size for responsive adjustments
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const fetchDrivers = async () => {
     try {
@@ -24,9 +32,8 @@ const Admin = () => {
   };
 
   useEffect(() => {
-  console.log("Attempting to fetch drivers..."); // Add this
-  fetchDrivers();
-}, []);
+    fetchDrivers();
+  }, []);
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this driver?")) {
@@ -37,27 +44,41 @@ const Admin = () => {
 
   return (
     <div style={pageWrapper}>
-      <AdminHero count={drivers.length} />
+      {/* Passing isMobile to children in case they need to adjust internal layouts */}
+      <AdminHero count={drivers.length} isMobile={isMobile} />
+      
       {loading ? (
         <div style={loaderStyle}>⌛ Accessing Fleet Database...</div>
       ) : (
-        <DriverList drivers={drivers} onDelete={handleDelete} />
+        <div style={listContainer}>
+          <DriverList drivers={drivers} onDelete={handleDelete} isMobile={isMobile} />
+        </div>
       )}
     </div>
   );
 };
 
+// --- Responsive Styles ---
 const pageWrapper = {
   width: '100%',
   maxWidth: '1200px',
   margin: '0 auto',
-  padding: '20px'
+  padding: '20px',
+  boxSizing: 'border-box', // Essential to prevent padding from causing overflow
+  minHeight: '100vh',
+};
+
+const listContainer = {
+  width: '100%',
+  marginTop: '20px',
+  overflowX: 'auto', // Allows the list/table to scroll horizontally on very small screens instead of breaking the page
+  WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
 };
 
 const loaderStyle = {
   color: '#f1c40f',
   textAlign: 'center',
-  padding: '50px',
+  padding: '100px 20px',
   fontSize: '1.2rem',
   fontWeight: '500'
 };

@@ -15,8 +15,15 @@ const EditDriver = () => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  // 1. Fetch existing data (Task 2d)
+  // Responsiveness Logic
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     const fetchDriver = async () => {
       try {
@@ -37,7 +44,6 @@ const EditDriver = () => {
     fetchDriver();
   }, [id, navigate]);
 
-  // 2. Save changes (Task 2d Update)
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -60,12 +66,20 @@ const EditDriver = () => {
     <div style={pageWrapper}>
       {/* Header Section */}
       <div style={headerSection}>
-        <h1 style={titleStyle}>Adjust Credentials</h1>
-        <p style={subtitleStyle}>Updating profile for Unit ID: {id.substring(0, 8)}</p>
+        <h1 style={{...titleStyle, fontSize: isMobile ? '1.8rem' : '2.4rem'}}>
+          Adjust Credentials
+        </h1>
+        <p style={subtitleStyle}>
+          {isMobile ? `ID: ...${id.substring(id.length - 8)}` : `Updating profile for Unit ID: ${id.substring(0, 8)}`}
+        </p>
       </div>
 
       {/* The Modern Card Container */}
-      <div style={cardContainer}>
+      <div style={{
+        ...cardContainer, 
+        padding: isMobile ? '25px 20px' : '40px',
+        borderRadius: isMobile ? '16px' : '24px'
+      }}>
         <DriverForm 
           title="Fleet Modification"
           formData={formData}
@@ -84,7 +98,7 @@ const EditDriver = () => {
   );
 };
 
-// --- Modern Layout Styles ---
+// --- Styles ---
 const pageWrapper = {
   display: 'flex',
   flexDirection: 'column',
@@ -92,6 +106,7 @@ const pageWrapper = {
   justifyContent: 'center',
   minHeight: '80vh',
   padding: '40px 20px',
+  boxSizing: 'border-box'
 };
 
 const headerSection = {
@@ -101,24 +116,22 @@ const headerSection = {
 
 const titleStyle = {
   color: '#f3f4f6',
-  fontSize: '2.4rem',
   fontWeight: '800',
   marginBottom: '8px',
 };
 
 const subtitleStyle = {
   color: '#9ca3af',
-  fontSize: '1rem',
+  fontSize: '0.95rem',
 };
 
 const cardContainer = {
   width: '100%',
-  maxWidth: '520px', // Prevents the stretched look
+  maxWidth: '520px',
   backgroundColor: '#1f2028',
-  padding: '40px',
-  borderRadius: '24px',
   border: '1px solid #2e303a',
   boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+  boxSizing: 'border-box'
 };
 
 const cancelBtnStyle = {
@@ -130,6 +143,7 @@ const cancelBtnStyle = {
   cursor: 'pointer',
   fontSize: '0.9rem',
   textDecoration: 'underline',
+  padding: '10px'
 };
 
 const statusMsg = {

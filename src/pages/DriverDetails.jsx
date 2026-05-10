@@ -7,7 +7,15 @@ const DriverDetails = () => {
   const { id } = useParams();
   const [driver, setDriver] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
+
+  // Handle responsiveness logic
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchSingleDriver = async () => {
@@ -35,33 +43,45 @@ const DriverDetails = () => {
 
   return (
     <div style={pageContainer}>
-      <div style={cardStyle}>
+      <div style={{
+        ...cardStyle, 
+        padding: isMobile ? '25px 15px' : '40px', // Shrink padding on mobile
+        borderRadius: isMobile ? '16px' : '24px'
+      }}>
         {/* Header with Icon */}
         <div style={headerSection}>
-          <div style={profileIcon}>🚖</div>
-          <h1 style={titleStyle}>Driver Profile</h1>
+          <div style={{
+            ...profileIcon, 
+            width: isMobile ? '60px' : '80px', 
+            height: isMobile ? '60px' : '80px',
+            fontSize: isMobile ? '2rem' : '3rem'
+          }}>🚖</div>
+          <h1 style={{...titleStyle, fontSize: isMobile ? '1.5rem' : '1.8rem'}}>Driver Profile</h1>
           <p style={idLabel}>System ID: {id.substring(0, 8)}...</p>
         </div>
 
         <div style={infoGrid}>
-          <div style={infoRow}>
+          {/* We use flexWrap and column-on-mobile logic for the rows */}
+          <div style={{...infoRow, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center'}}>
             <span style={labelStyle}>Full Name</span>
-            <span style={valueStyle}>{driver.name}</span>
+            <span style={{...valueStyle, marginTop: isMobile ? '4px' : '0'}}>{driver.name}</span>
           </div>
 
-          <div style={infoRow}>
+          <div style={{...infoRow, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center'}}>
             <span style={labelStyle}>Current Rating</span>
-            <span style={valueStyle}>⭐ {driver.rating} <small style={{color: '#4b5563'}}>/ 5.0</small></span>
+            <span style={{...valueStyle, marginTop: isMobile ? '4px' : '0'}}>
+              ⭐ {driver.rating} <small style={{color: '#4b5563'}}>/ 5.0</small>
+            </span>
           </div>
 
-          <div style={infoRow}>
+          <div style={{...infoRow, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center'}}>
             <span style={labelStyle}>Price Per KM</span>
-            <span style={valueStyle}>${driver.pricePerKm}</span>
+            <span style={{...valueStyle, marginTop: isMobile ? '4px' : '0'}}>${driver.pricePerKm}</span>
           </div>
 
-          <div style={infoRow}>
+          <div style={{...infoRow, flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center'}}>
             <span style={labelStyle}>Status</span>
-            <span style={statusBadge}>Active Fleet</span>
+            <span style={{...statusBadge, marginTop: isMobile ? '4px' : '0'}}>Active Fleet</span>
           </div>
         </div>
 
@@ -78,35 +98,30 @@ const DriverDetails = () => {
   );
 };
 
-// --- Modern Dark Styles ---
+// --- Styles (Maintained & Optimized) ---
 const pageContainer = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   minHeight: '80vh',
   padding: '20px',
+  boxSizing: 'border-box',
 };
 
 const cardStyle = {
   backgroundColor: '#1f2028',
   border: '1px solid #2e303a',
-  borderRadius: '24px',
-  padding: '40px',
   width: '100%',
   maxWidth: '480px',
   boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
   textAlign: 'center',
+  boxSizing: 'border-box',
 };
 
-const headerSection = {
-  marginBottom: '30px',
-};
+const headerSection = { marginBottom: '30px' };
 
 const profileIcon = {
-  fontSize: '3rem',
   backgroundColor: 'rgba(241, 196, 15, 0.1)',
-  width: '80px',
-  height: '80px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -115,29 +130,15 @@ const profileIcon = {
   border: '1px solid #f1c40f',
 };
 
-const titleStyle = {
-  color: '#f3f4f6',
-  fontSize: '1.8rem',
-  margin: 0,
-};
+const titleStyle = { color: '#f3f4f6', margin: 0, fontWeight: '800' };
 
-const idLabel = {
-  color: '#6b7280',
-  fontSize: '0.8rem',
-  marginTop: '5px',
-};
+const idLabel = { color: '#6b7280', fontSize: '0.8rem', marginTop: '5px' };
 
-const infoGrid = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '12px',
-  marginBottom: '35px',
-};
+const infoGrid = { display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '35px' };
 
 const infoRow = {
   display: 'flex',
   justifyContent: 'space-between',
-  alignItems: 'center',
   padding: '15px',
   backgroundColor: '#16171d',
   borderRadius: '12px',
@@ -146,29 +147,17 @@ const infoRow = {
 
 const labelStyle = {
   color: '#9ca3af',
-  fontSize: '0.8rem',
+  fontSize: '0.75rem',
   textTransform: 'uppercase',
   fontWeight: '600',
   letterSpacing: '0.5px',
 };
 
-const valueStyle = {
-  color: '#f3f4f6',
-  fontSize: '1.1rem',
-  fontWeight: '500',
-};
+const valueStyle = { color: '#f3f4f6', fontSize: '1.1rem', fontWeight: '500' };
 
-const statusBadge = {
-  color: '#10b981',
-  fontWeight: 'bold',
-  fontSize: '0.9rem',
-};
+const statusBadge = { color: '#10b981', fontWeight: 'bold', fontSize: '0.9rem' };
 
-const buttonGroup = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '12px',
-};
+const buttonGroup = { display: 'flex', flexDirection: 'column', gap: '12px' };
 
 const editBtn = {
   backgroundColor: '#f1c40f',
@@ -178,7 +167,6 @@ const editBtn = {
   textDecoration: 'none',
   fontWeight: '800',
   fontSize: '1rem',
-  transition: '0.2s',
 };
 
 const backBtn = {
@@ -187,13 +175,9 @@ const backBtn = {
   color: '#6b7280',
   cursor: 'pointer',
   fontSize: '0.9rem',
+  padding: '10px'
 };
 
-const loaderStyle = {
-  color: '#f1c40f',
-  textAlign: 'center',
-  marginTop: '100px',
-  fontSize: '1.2rem',
-};
+const loaderStyle = { color: '#f1c40f', textAlign: 'center', marginTop: '100px', fontSize: '1.2rem' };
 
 export default DriverDetails;

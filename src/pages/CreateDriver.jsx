@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase/config';
 import { collection, addDoc } from 'firebase/firestore';
@@ -6,6 +6,14 @@ import DriverForm from '../view/adminview/DriverForm';
 
 const CreateDriver = () => {
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  // Track screen size for responsive adjustments
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -15,35 +23,36 @@ const CreateDriver = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
       const driversCollection = collection(db, "drivers");
-      
-      // Task 2a: Store form data in Firebase Firestore
       await addDoc(driversCollection, {
         name: formData.name,
         rating: Number(formData.rating), 
         pricePerKm: Number(formData.pricePerKm),
         createdAt: new Date() 
       });
-
-      // Navigate back to the Admin Dashboard (Task 1 SPA Navigation)
       navigate('/admin');
     } catch (error) {
       console.error("Error adding driver: ", error);
-      alert("Failed to add driver. Check console.");
+      alert("Failed to add driver.");
     }
   };
 
   return (
     <div style={pageWrapper}>
       <div style={headerSection}>
-        <h1 style={titleStyle}>Onboard Driver</h1>
+        {/* Responsive Font Size */}
+        <h1 style={{...titleStyle, fontSize: isMobile ? '1.8rem' : '2.5rem'}}>
+          Onboard Driver
+        </h1>
         <p style={subtitleStyle}>Enter driver credentials to update the fleet registry.</p>
       </div>
 
-      <div style={cardContainer}>
-        {/* Reusing your modular form component */}
+      <div style={{
+        ...cardContainer, 
+        padding: isMobile ? '25px' : '40px', // Less padding on mobile to save space
+        borderRadius: isMobile ? '16px' : '24px'
+      }}>
         <DriverForm 
           title="Fleet Registration Form"
           formData={formData}
@@ -55,14 +64,14 @@ const CreateDriver = () => {
           onClick={() => navigate('/admin')}
           style={backButtonStyle}
         >
-          ← Cancel and Return to Dashboard
+          ← Cancel and Return
         </button>
       </div>
     </div>
   );
 };
 
-// --- Modern Layout Styles ---
+// --- Styles ---
 const pageWrapper = {
   width: '100%',
   minHeight: '80vh',
@@ -71,6 +80,7 @@ const pageWrapper = {
   alignItems: 'center',
   justifyContent: 'center',
   padding: '40px 20px',
+  boxSizing: 'border-box' // Essential for mobile padding
 };
 
 const headerSection = {
@@ -80,24 +90,24 @@ const headerSection = {
 
 const titleStyle = {
   color: '#f3f4f6',
-  fontSize: '2.5rem',
   fontWeight: '800',
   marginBottom: '8px',
 };
 
 const subtitleStyle = {
   color: '#9ca3af',
-  fontSize: '1rem',
+  fontSize: '0.95rem',
+  maxWidth: '300px', // Keeps text centered and readable on mobile
+  margin: '0 auto'
 };
 
 const cardContainer = {
   width: '100%',
   maxWidth: '500px',
   backgroundColor: '#1f2028',
-  padding: '40px',
-  borderRadius: '24px',
   border: '1px solid #2e303a',
   boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+  boxSizing: 'border-box'
 };
 
 const backButtonStyle = {
@@ -108,7 +118,7 @@ const backButtonStyle = {
   color: '#6b7280',
   cursor: 'pointer',
   fontSize: '0.9rem',
-  transition: 'color 0.2s',
+  padding: '10px' // Larger tap target for mobile
 };
 
 export default CreateDriver;

@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const DriverForm = ({ formData, setFormData, onSubmit, title }) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div style={formWrapper}>
-      <h2 style={titleStyle}>{title}</h2>
+      {/* Dynamic Title Size */}
+      <h2 style={{...titleStyle, fontSize: isMobile ? '1.25rem' : '1.5rem'}}>{title}</h2>
       
       <form onSubmit={onSubmit} style={formStyle}>
         {/* Driver Name Input */}
@@ -49,8 +58,12 @@ const DriverForm = ({ formData, setFormData, onSubmit, title }) => {
           />
         </div>
         
-        {/* Submit Button */}
-        <button type="submit" style={submitButtonStyle}>
+        {/* Submit Button - Larger padding for thumbs on mobile */}
+        <button type="submit" style={{
+          ...submitButtonStyle, 
+          padding: isMobile ? '16px' : '14px',
+          fontSize: isMobile ? '0.95rem' : '1rem'
+        }}>
           Save Driver to Fleet
         </button>
       </form>
@@ -61,11 +74,11 @@ const DriverForm = ({ formData, setFormData, onSubmit, title }) => {
 // --- Modern Form Styles ---
 const formWrapper = {
   width: '100%',
+  boxSizing: 'border-box',
 };
 
 const titleStyle = {
   color: '#f3f4f6',
-  fontSize: '1.5rem',
   fontWeight: '700',
   marginBottom: '25px',
   textAlign: 'center',
@@ -85,7 +98,7 @@ const inputGroup = {
 
 const labelStyle = {
   color: '#9ca3af',
-  fontSize: '0.85rem',
+  fontSize: '0.8rem', // Slightly smaller labels look cleaner on mobile
   fontWeight: '600',
   textAlign: 'left',
   textTransform: 'uppercase',
@@ -94,26 +107,24 @@ const labelStyle = {
 
 const inputStyle = {
   padding: '12px 16px',
-  backgroundColor: '#16171d', // Darker contrast for inputs
+  backgroundColor: '#16171d',
   border: '1px solid #2e303a',
   borderRadius: '8px',
   color: '#f3f4f6',
   fontSize: '1rem',
   outline: 'none',
-  transition: 'border-color 0.2s, box-shadow 0.2s',
+  width: '100%', // Ensure inputs never overflow the card
+  boxSizing: 'border-box',
 };
 
 const submitButtonStyle = {
   marginTop: '10px',
-  padding: '14px',
-  backgroundColor: '#f1c40f', // Taxi Yellow
+  backgroundColor: '#f1c40f',
   color: '#08060d',
   border: 'none',
   borderRadius: '10px',
   fontWeight: '800',
-  fontSize: '1rem',
   cursor: 'pointer',
-  transition: 'transform 0.1s active, filter 0.2s',
   boxShadow: '0 4px 12px rgba(241, 196, 15, 0.2)',
 };
 

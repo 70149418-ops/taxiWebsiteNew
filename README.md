@@ -1,16 +1,36 @@
-# React + Vite
+## Live link:
+https://taxiwebsitenew.web.app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## GitHub repo link:
+https://github.com/70149418-ops/taxiWebsiteNew.git
 
-Currently, two official plugins are available:
+## File Structure:
+![Folder Structure](./src/assets/image1.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Logo:
+![logo](./src/assets/logo.png)
 
-## React Compiler
+## Home:
+![Home](./src/assets/home.png)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Dashboard:
+![Dashboard](./src/assets/dashboard.png)
 
-## Expanding the ESLint configuration
+## Create Driver:
+![CreateDriver1](./src/assets/createDriver1.png)
+![CreateDriver2](./src/assets/createDriver2.png)
+![CreateDriver3](./src/assets/createDriver3.png)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Read Driver:
+![ReadDriver1](./src/assets/readDriver1.png)
+![ReadDriver2](./src/assets/readDriver2.png)
+
+## Update Driver:
+![UpdateDriver1](./src/assets/updateDriver1.png)
+![UpdateDriver2](./src/assets/updateDriver2.png)
+
+## Delete Driver:
+![DeleteDriver](./src/assets/deleteDriver.png)
+
+## Dynamic Route Page:
+![DynamicPage](./src/assets/dynamicPage.png)
